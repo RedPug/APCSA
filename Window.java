@@ -1,3 +1,5 @@
+package APCSA;
+
 import javax.swing.*;
 
 public class Window{
@@ -7,8 +9,6 @@ public class Window{
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
         frame.setSize(500,400);
-
-        
 
         JPanel panel = new JPanel();
 
@@ -31,6 +31,6 @@ public class Window{
     }
     
     public static void main(String[] args){
-        Window window = new Window();
+        //Window window = new Window();
     }
 }
