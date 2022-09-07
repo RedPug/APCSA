@@ -1,5 +1,3 @@
-package APCSA;
-
 import javax.swing.*;
 
 public class Window{

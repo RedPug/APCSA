@@ -1,4 +1,3 @@
-package APCSA;
 
 import java.util.Scanner;
 
