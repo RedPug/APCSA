@@ -20,10 +20,10 @@ public class MadLibs {
         String[] riddles = { //define all of the riddle choices
             "I went to the animal <noun>, the <plural_noun> and the <number> beasts were there.",
             "Once upon a time in a <adjective> land, a <noun> <adverb> grew.",
-            "Make up your own three-blank Mad Lib to include other parts of speech such as verbs and proper nouns.",
             "The <adjective> <noun> is delicious.",
             "If not for the <noun>, the <adjective> and <adjective> elephant would go extinct.",
-            "As you <verb> up to the <adjective> house, you knock on the door to hear a <otomatopoeia/sound>."
+            "As you <verb> up to the <adjective> house, you knock on the door to hear a <otomatopoeia/sound>.",
+            "<number> * <number> does not equal <noun> nor <prime number>"
         };
 
         Random rand = new Random(); //for getting random numbers
