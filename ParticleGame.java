@@ -6,8 +6,6 @@ import java.awt.geom.AffineTransform;
 
 public class ParticleGame extends Game{
 
-    
-
     public ArrayList<Particle> particles;
 
     public int particleRadius = 10;
@@ -16,20 +14,15 @@ public class ParticleGame extends Game{
 
     public static double G = 1;
 
-
-    //static int WIDTH = 300;
-    //static int HEIGHT = 300;
-
     public ParticleGame() {
         super("Particle Game!");
     }
 
     public static void main(String[] args){
-        ParticleGame game = new ParticleGame();
-        game.particleRadius = 10;
-        game.fps = 1;
+        new ParticleGame();
     }
 
+    //used to detect mouse movement when clicking
     private MouseEvent lastClickEvent;
 
     @Override
@@ -52,7 +45,7 @@ public class ParticleGame extends Game{
             p.velX = dx/50;
             p.velY = dy/50;
             this.particles.add(p);
-            System.out.println("pos:"+e.getX()+","+e.getY());
+            //System.out.println("pos:"+e.getX()+","+e.getY());
         }
     }
 
@@ -73,22 +66,51 @@ public class ParticleGame extends Game{
     private double translateX = 0;
     private double translateY = 0;
     private double zoom;
+    private double scale;
 
     @Override
-    public void onKeyTyped(KeyEvent e){
-        char key = e.getKeyChar();
-        if(key == 'g'){
-            this.gravity = !this.gravity;
+    public void onKeyPressed(KeyEvent e){
+        int keyCode = e.getKeyCode();
+
+        switch(keyCode){
+            case KeyEvent.VK_UNDEFINED:
+                System.out.println("undefined input!");
+                break;
+            case KeyEvent.VK_G:
+                this.gravity = !this.gravity;
+                break;
+            case KeyEvent.VK_W:
+                translateY -= 10/zoom;
+                break;
+            case KeyEvent.VK_S:
+                translateY += 10/zoom;
+                break;
+            case KeyEvent.VK_A:
+                translateX -= 10/zoom;
+                break;
+            case KeyEvent.VK_D:
+                translateX += 10/zoom;
+                break;
+            case KeyEvent.VK_Q:
+                scale -= 1;
+                zoom = Math.pow(1.1,scale);
+                break;
+            case KeyEvent.VK_E:
+                scale += 1;
+                zoom = Math.pow(1.1,scale);
+                break;
+            case KeyEvent.VK_UP:
+                physicsTps *= 2;
+                break;
+            case KeyEvent.VK_DOWN:
+                physicsTps /= 2;
+                break;
+            case KeyEvent.VK_F5:
+                this.particles.clear();
+                this.zoom = 1;
+                this.scale = 0;
+                break;
         }
-
-        if(key == 'w'){translateY -= 10/zoom;}
-        if(key == 's'){translateY += 10/zoom;}
-
-        if(key == 'a'){translateX -= 10/zoom;}
-        if(key == 'd'){translateX += 10/zoom;}
-
-        if(key == 'q'){zoom /= 1.1;}
-        if(key == 'e'){zoom *= 1.1;}
     }
 
     @Override
@@ -97,31 +119,15 @@ public class ParticleGame extends Game{
 
         this.particleRadius = 10;
         this.zoom = 1;
+        this.scale = 0;
 
         super.init();
-
-        
-        /*
-        double maxSpd = 0.5;
-        for(int i = 0; i < 30; i++){
-            Particle p = new Particle(Math.random()*screenWidth,Math.random()*screenHeight,(Math.random()+1)*10);
-            p.velX = Math.random()*maxSpd*2-maxSpd;
-            p.velY = Math.random()*maxSpd*2-maxSpd;
-            //p.mass = p.radius;
-
-            this.particles.add(p);
-        }
-        */
-        
-        //Particle p1 = this.particles.get(5);
-        //p1.velX = 5;
-        //this.particles.set(5,p1);
     }
 
-    public void solveCollision(Particle p1, Particle p2){
+    public void solveCollision(Particle p1, Particle p2, double dt){
         if(p1.checkCollisions(p2)){ //if the particles collide, do something with them
-            double velX = p2.velX - p1.velX; //local velocity between the two points, from p1 to p2
-            double velY = p2.velY - p1.velY;
+            double velX = (p2.velX - p1.velX)*dt/1000; //local velocity between the two points, from p1 to p2
+            double velY = (p2.velY - p1.velY)*dt/1000;
             double velMag = Math.sqrt(velX*velX + velY*velY);
             //velX /= velMag; //normalize velocity components to get direction
             //velY /= velMag;
@@ -165,11 +171,11 @@ public class ParticleGame extends Game{
     }
 
     @Override
-    public void tick(){
-        super.tick();
+    public void tick(double dt){
+        super.tick(dt);
         
         for(Particle p : this.particles){
-            p.update();
+            p.update(dt);
         }
 
         //System.out.println(this.getWidth());
@@ -181,9 +187,10 @@ public class ParticleGame extends Game{
             Particle p1 = this.particles.get(i);
             //momentum += p1.mass * Math.sqrt(p1.velX * p1.velX + p1.velY * p1.velY);
             for(int j = i + 1; j < this.particles.size(); j++){
+                if(j == i){break;}
                 Particle p2 = this.particles.get(j);
 
-                this.solveCollision(p1, p2);
+                this.solveCollision(p1, p2, dt);
 
                 if(this.gravity){
                     double rCube = Math.pow((p2.x-p1.x)*(p2.x-p1.x)+(p2.y-p1.y)*(p2.y-p1.y),1.5); //distance (sqrt) cubed, combine to get 3/2 power
@@ -192,8 +199,8 @@ public class ParticleGame extends Game{
                     double fY = G*p1.mass*p2.mass/rCube*(p2.y-p1.y);
                     //System.out.println(p1.mass+","+p2.mass);
 
-                    p1.applyForce(fX, fY);
-                    p2.applyForce(-fX, -fY);
+                    p1.applyForce(fX, fY, dt);
+                    p2.applyForce(-fX, -fY, dt);
                 }
             }
 
@@ -220,36 +227,12 @@ public class ParticleGame extends Game{
         double zoomWidth = screenWidth * zoom;
         double zoomHeight = screenHeight * zoom;
 
-        double anchorx = (screenWidth - zoomWidth) / 2; //= screenWidth*(1-zoom)/2
+        double anchorx = (screenWidth - zoomWidth) / 2;
         double anchory = (screenHeight - zoomHeight) / 2;
 
-        //-1 when x = 0, 1 when x = screenWidth
-        //double thingx = (p.x)/screenWidth-0.5;
-        //double thingy = (p.y)/screenHeight-0.5;
-        /*
-        (0,0) -> (translateX, translateY)
-        (screenWidth,screenHeight) -> (translateX + zoomWidth, translateY + zoomHeight)
-         */
-
-        //p.translate((int)translateX, (int)translateY);
-        
-        //p.translate(-(int)screenWidth/2, -(int)screenHeight/2);
-
-        //p.setLocation(p.x*zoom, p.y*zoom);
-
-        //p.setLocation(translateX + thingx * zoomWidth, translateY + thingy * zoomHeight);\
-
         p.translate(-(int)anchorx, -(int)anchory);
-        
         p.setLocation(p.x/zoom, p.y/zoom);
-        
-
         p.translate((int)translateX, (int)translateY);
-
-        
-        
-        
-        
 
         return p;
     }
@@ -262,13 +245,8 @@ public class ParticleGame extends Game{
         g.setColor(Color.BLACK);
         g.drawString("size = "+this.particleRadius, 10, 10);
         g.drawString("Gravity = "+this.gravity,10,20);
-        g.drawString("zoom = "+this.zoom,10,30);
-
-        //g.translate(-translateX, -translateY); //translate to where you're looking
-        //g.translate(+screenWidth*scale/2, +screenHeight*scale/2); //center origin at center of screen
-        //System.out.println("Scale = " + this.scale);
-        //g.scale(scale, scale); //scale out from the center
-        //g.translate(-screenWidth/2, -screenHeight/2); //return origin
+        g.drawString("scale = "+this.scale,10,30);
+        g.drawString("Physics Speed = "+this.physicsTps/this.fps,10,40);
 
         double zoomWidth = screenWidth * zoom;
         double zoomHeight = screenHeight * zoom;
@@ -321,14 +299,14 @@ class Particle{
         this.color = new Color((int)(Math.random()*255),(int)(Math.random()*255),(int)(Math.random()*255));
     }
 
-    public void update(){
-        this.x += this.velX;
-        this.y += this.velY;
+    public void update(double dt){
+        this.x += this.velX*dt/1000;
+        this.y += this.velY*dt/1000;
     }
 
-    public void applyForce(double xMag, double yMag){
-        this.velX += xMag/this.mass;
-        this.velY += yMag/this.mass;
+    public void applyForce(double xMag, double yMag, double dt){
+        this.velX += xMag/this.mass*dt/1000;
+        this.velY += yMag/this.mass*dt/1000;
     }
 
     /**

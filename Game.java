@@ -4,9 +4,12 @@ import javax.swing.*;
 
 
 public class Game extends JPanel{
+    float physicsTps = 60;
     float fps = 60;
     static int screenWidth = 300;
     static int screenHeight = 300;
+
+    public double timeScale;
 
     public JFrame frame;
 
@@ -58,10 +61,12 @@ public class Game extends JPanel{
                 onKeyReleased(e);
             }
         });
+
+        this.timeScale = 1;
         
 
         this.init();
-
+        /*
         while(true){
             long t0 = System.currentTimeMillis();
 
@@ -83,13 +88,53 @@ public class Game extends JPanel{
             screenWidth = this.getWidth();
             screenHeight = this.getHeight();
         }
+        */
+        long t0 = System.currentTimeMillis();
+        long t1 = System.currentTimeMillis();
+        double acc = 0.0;
+        while(true){
+            /*
+            long t = System.currentTimeMillis();
+
+            double tL = (1000/this.physicsTps); //time for a logic tick in ms
+
+            int dt = (int)(t - t0); //time that has passed
+            */
+            t0 = System.currentTimeMillis();
+            /*
+            acc += dt;
+
+            while(acc >= tL){
+                this.tick(tL);
+                acc -= tL;
+            }
+            */
+            //long t1 = System.currentTimeMillis();
+
+            int tLastFrame = Math.min((int)(t0-t1),1);
+
+            this.tick(physicsTps*tLastFrame);
+
+            this.repaint();
+
+            t1 = System.currentTimeMillis();
+
+            int tDiff = (int)(t1 - t0);
+
+            int desiredT = (int)(1000/fps);
+
+            try {
+                Thread.sleep(Math.max(desiredT-tDiff,0));
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+        }
     }
 
     @Override
     public void paint(Graphics g){
         super.paint(g);
         this.draw((Graphics2D)g);
-        //System.out.println("paint ;(");
     }
 
     public void draw(Graphics2D g){}
@@ -112,16 +157,5 @@ public class Game extends JPanel{
 
     public void init(){}
 
-    public void tick(){}
-
-    /*
-    @Override
-    public void keyTyped(KeyEvent e) {System.out.println("test");}
-
-    @Override
-    public void keyPressed(KeyEvent e) {}
-
-    @Override
-    public void keyReleased(KeyEvent e) {}
-    */
+    public void tick(double dt){}
 }
