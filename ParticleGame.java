@@ -152,8 +152,8 @@ public class ParticleGame extends Game{
                 double fY = -yDiff*inertia*0.4;
 
                 //System.out.println(fX+","+fY);
-                p1.applyForce(fX, fY);
-                p2.applyForce(-fX,-fY);
+                p1.applyForce(fX, fY, dt);
+                p2.applyForce(-fX,-fY, dt);
             }
             
             p1.x = xMid - p1.radius * xDiff;
