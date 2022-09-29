@@ -12,7 +12,7 @@ public class ParticleGame extends Game{
 
     public boolean gravity = false;
 
-    public static double G = 1;
+    public static double G = 100.0;
 
     public ParticleGame() {
         super("Particle Game!");
@@ -42,8 +42,8 @@ public class ParticleGame extends Game{
             if(this.particleRadius <=0){return;}
             Point pt = this.screenToGame(x, y);
             Particle p = new Particle(pt.x, pt.y, this.particleRadius);
-            p.velX = dx/50;
-            p.velY = dy/50;
+            p.velX = dx/5/zoom;
+            p.velY = dy/5/zoom;
             this.particles.add(p);
             //System.out.println("pos:"+e.getX()+","+e.getY());
         }
@@ -126,8 +126,8 @@ public class ParticleGame extends Game{
 
     public void solveCollision(Particle p1, Particle p2, double dt){
         if(p1.checkCollisions(p2)){ //if the particles collide, do something with them
-            double velX = (p2.velX - p1.velX)*dt/1000; //local velocity between the two points, from p1 to p2
-            double velY = (p2.velY - p1.velY)*dt/1000;
+            double velX = (p2.velX - p1.velX); //local velocity between the two points, from p1 to p2
+            double velY = (p2.velY - p1.velY);
             double velMag = Math.sqrt(velX*velX + velY*velY);
             //velX /= velMag; //normalize velocity components to get direction
             //velY /= velMag;
@@ -148,8 +148,8 @@ public class ParticleGame extends Game{
 
                 double inertia = velMag * (p1.mass + p2.mass) / 2;
 
-                double fX = -xDiff*inertia*0.4;
-                double fY = -yDiff*inertia*0.4;
+                double fX = -xDiff*inertia*1;
+                double fY = -yDiff*inertia*1;
 
                 //System.out.println(fX+","+fY);
                 p1.applyForce(fX, fY, dt);
@@ -166,7 +166,6 @@ public class ParticleGame extends Game{
                 p1.x += 1;
                 p1.y += 1;
             }
-            
         }
     }
 
@@ -263,18 +262,22 @@ public class ParticleGame extends Game{
 
         //System.out.println(this.particles);
 
+        //double xAvg = 0.0;
+        //double yAvg = 0.0;
+
+        //double mTotal = 0.0;
+
         for(Particle p : this.particles){
             p.draw(g);
+            //xAvg += p.x*p.mass;
+            //yAvg += p.y*p.mass;
+            //mTotal += p.mass;
         }
 
-
-        //g.translate(screenWidth/2, screenHeight/2);
-        //g.scale(1/scale, 1/scale);
-        //g.translate(-screenWidth/2, -screenHeight/2);
-        //g.translate(translateX, translateY);
-        
-
-        //g.fillOval(20, 20, 10, 10);
+        //xAvg /= mTotal;
+        //yAvg /= mTotal;
+        //g.setColor(Color.red);
+        //g.fillOval((int)xAvg-5, (int)yAvg-5, 10, 10);
 
         g.dispose();
     }

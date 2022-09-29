@@ -4,8 +4,8 @@ import javax.swing.*;
 
 
 public class Game extends JPanel{
-    float physicsTps = 60;
     float fps = 60;
+    float physicsTps = fps;
     static int screenWidth = 300;
     static int screenHeight = 300;
 
@@ -91,7 +91,7 @@ public class Game extends JPanel{
         */
         long t0 = System.currentTimeMillis();
         long t1 = System.currentTimeMillis();
-        double acc = 0.0;
+        //double acc = 0.0;
         while(true){
             /*
             long t = System.currentTimeMillis();

@@ -62,6 +62,6 @@ public class MadLibs {
             }
             System.out.println(riddle); 
         }
-        
+        sc.close();
     }
 }
