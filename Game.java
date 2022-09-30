@@ -6,6 +6,7 @@ import javax.swing.*;
 public class Game extends JPanel{
     float fps = 60;
     float physicsTps = fps;
+
     int physicsRes = 10;
 
     static int screenWidth = 300;
@@ -35,11 +36,8 @@ public class Game extends JPanel{
         });
 
         frame.addMouseMotionListener(new MouseMotionListener(){
-
             @Override
-            public void mouseDragged(MouseEvent e) {
-            }
-
+            public void mouseDragged(MouseEvent e) {}
             @Override
             public void mouseMoved(MouseEvent e) {onMouseMoved(e);}
         });
@@ -65,7 +63,6 @@ public class Game extends JPanel{
         });
 
         this.timeScale = 1;
-        
 
         this.init();
         /*
@@ -93,13 +90,18 @@ public class Game extends JPanel{
         */
         long t0 = System.currentTimeMillis();
         long t1 = System.currentTimeMillis();
-        //double acc = 0.0;
+
+        //game loop
         while(true){
             t0 = System.currentTimeMillis();
 
+            //t0 - t1 because t0 is technically more up to date, as t1 was only updated in the last frame!
             int tLastFrame = Math.min((int)(t0-t1),1);
 
-            for(int i = 0; i < physicsRes; i ++){
+            for(int i = 0; i < physicsRes; i++){
+                //the total time elapsed in the tick function during 1 frame is
+                //equal tothe physics speed * the time it takes to render the last frame 
+                //(idealy 1/60th of a second at physics speed 1)
                 this.tick(physicsTps*tLastFrame/physicsRes);
             }
             
@@ -107,12 +109,12 @@ public class Game extends JPanel{
 
             t1 = System.currentTimeMillis();
 
-            int tDiff = (int)(t1 - t0);
+            int tDiff = (int)(t1 - t0); //the time spent rendering the current frame
 
-            int desiredT = (int)(1000/fps);
+            int desiredT = (int)(1000/fps); //ideal time to render a frame
 
             try {
-                Thread.sleep(Math.max(desiredT-tDiff,0));
+                Thread.sleep(Math.max(desiredT-tDiff,0)); //sleep for the remaining time for the frame
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }
@@ -125,6 +127,10 @@ public class Game extends JPanel{
         this.draw((Graphics2D)g);
     }
 
+    /**
+     * called every frame, used to draw all things to the screen.
+     * @param g
+     */
     public void draw(Graphics2D g){}
 
     public void onMouseClick(MouseEvent e){}
@@ -143,7 +149,14 @@ public class Game extends JPanel{
 
     public void onKeyTyped(KeyEvent e){}
 
+    /**
+     * used to initialize values before the game starts
+     */
     public void init(){}
 
+    /**
+     * Updates the physics simulation to go forward dt milliseconds.
+     * @param dt Number of milliseconds to fast forward
+     */
     public void tick(double dt){}
 }
