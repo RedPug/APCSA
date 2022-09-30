@@ -246,6 +246,7 @@ public class ParticleGame extends Game{
         g.drawString("Gravity = "+this.gravity,10,20);
         g.drawString("scale = "+this.scale,10,30);
         g.drawString("Physics Speed = "+this.physicsTps/this.fps,10,40);
+        g.drawString("Physics Resolution = "+this.physicsRes,10,50);
 
         double zoomWidth = screenWidth * zoom;
         double zoomHeight = screenHeight * zoom;
@@ -262,22 +263,22 @@ public class ParticleGame extends Game{
 
         //System.out.println(this.particles);
 
-        //double xAvg = 0.0;
-        //double yAvg = 0.0;
+        double xAvg = 0.0;
+        double yAvg = 0.0;
 
-        //double mTotal = 0.0;
+        double mTotal = 0.0;
 
         for(Particle p : this.particles){
             p.draw(g);
-            //xAvg += p.x*p.mass;
-            //yAvg += p.y*p.mass;
-            //mTotal += p.mass;
+            xAvg += p.x*p.mass;
+            yAvg += p.y*p.mass;
+            mTotal += p.mass;
         }
 
-        //xAvg /= mTotal;
-        //yAvg /= mTotal;
-        //g.setColor(Color.red);
-        //g.fillOval((int)xAvg-5, (int)yAvg-5, 10, 10);
+        xAvg /= mTotal;
+        yAvg /= mTotal;
+        g.setColor(Color.red);
+        g.drawOval((int)xAvg-5, (int)yAvg-5, 10, 10);
 
         g.dispose();
     }

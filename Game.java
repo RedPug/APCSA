@@ -6,6 +6,8 @@ import javax.swing.*;
 public class Game extends JPanel{
     float fps = 60;
     float physicsTps = fps;
+    int physicsRes = 10;
+
     static int screenWidth = 300;
     static int screenHeight = 300;
 
@@ -93,28 +95,14 @@ public class Game extends JPanel{
         long t1 = System.currentTimeMillis();
         //double acc = 0.0;
         while(true){
-            /*
-            long t = System.currentTimeMillis();
-
-            double tL = (1000/this.physicsTps); //time for a logic tick in ms
-
-            int dt = (int)(t - t0); //time that has passed
-            */
             t0 = System.currentTimeMillis();
-            /*
-            acc += dt;
-
-            while(acc >= tL){
-                this.tick(tL);
-                acc -= tL;
-            }
-            */
-            //long t1 = System.currentTimeMillis();
 
             int tLastFrame = Math.min((int)(t0-t1),1);
 
-            this.tick(physicsTps*tLastFrame);
-
+            for(int i = 0; i < physicsRes; i ++){
+                this.tick(physicsTps*tLastFrame/physicsRes);
+            }
+            
             this.repaint();
 
             t1 = System.currentTimeMillis();
