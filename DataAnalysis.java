@@ -36,6 +36,6 @@ public class DataAnalysis {
         if(mode.equals("avg")){
             System.out.println("The average of your data is: " + (sum / dataPoints.size()));
         }
-
+        sc.close();
     }
 }
