@@ -16,25 +16,42 @@ public class ATM {
 
             switch(input){
                 case 1: //withdraw
-                    Account account = getAccount();
-
-                    boolean login = logInAccount(account);
-
-                    if(!login){break;}
-
-                    System.out.println("Please enter the quantity you would like to windraw.");
-                    double q = -1;
-                    while(q >= 0){
-                        if(q > account.balance){
-                            System.out.print("Your balance is $"+account.balance+". ");
+                    do{
+                        Account account = getAccount();
+                        boolean login = logInAccount(account);
+    
+                        if(!login){break;}
+    
+                        System.out.println("Please enter the quantity you would like to windraw.");
+                        double q = Double.parseDouble(sc.nextLine());;
+                        while(q < 0 || q > account.balance){
+                            if(q > account.balance){
+                                System.out.print("Your balance is $"+account.balance+". ");
+                            }
+                            System.out.print("Please enter a valid quanity.");
+                            q = Double.parseDouble(sc.nextLine());
                         }
-                        System.out.print("Please enter a valid quanity.");
-                        q = Double.parseDouble(sc.nextLine());
-                    }
-                    System.out.println("You have withdrawn: $"+q);
-                    account.balance -= q;
+                        System.out.println("You have withdrawn: $"+q);
+                        account.balance -= q;
+                    } while(false);
                     break;
                 case 2: //depsoit
+                    do{
+                        Account account = getAccount();
+                        boolean login = logInAccount(account);
+                        
+                        if(!login){break;}
+    
+                        System.out.println("Please enter the quantity you would like to deposit.");
+                        double q = Double.parseDouble(sc.nextLine());;
+                        while(q < 0){
+                            System.out.print("Please enter a valid quanity.");
+                            q = Double.parseDouble(sc.nextLine());
+                        }
+                        System.out.println("You have deposited: $"+q);
+                        account.balance += q;
+                    } while (false);
+
                     break;
                 case 3: //create account
                     System.out.println("Begin account making process:");
@@ -63,8 +80,7 @@ public class ATM {
     public static Account getAccount(){
         System.out.println("Please enter your account pin.");
         int pin = -1;
-        while(!map.containsKey(pin)){
-            System.out.println("That pin could not be found. Please try again.");
+        while(true){
             String scan = sc.nextLine();
             if(scan.equals("exit")){return null;}
             try {
@@ -72,13 +88,15 @@ public class ATM {
             } catch (Exception e) {
                 continue;
             }
+            if(map.containsKey(pin)){break;}
+            System.out.println("That pin could not be found. Please try again.");
         }
         return map.get(pin);
     }
 
     public static boolean logInAccount(Account account){
         System.out.print("Please enter your password:");
-        String pass = "";
+        String pass = sc.nextLine();
         while(!pass.equals(account.password)){
             System.out.println("Sorry, that was incorrect. Please try again. To cancel, type \"exit\"");
             pass = sc.nextLine();
