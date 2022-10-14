@@ -6,6 +6,13 @@
     "configurations": [
         {
             "type": "java",
+            "name": "Launch ChooseYourPath",
+            "request": "launch",
+            "mainClass": "ChooseYourPath",
+            "projectName": "APCSA_c29e881b"
+        },
+        {
+            "type": "java",
             "name": "Launch Current File",
             "request": "launch",
             "mainClass": "${file}"
