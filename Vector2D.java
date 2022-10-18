@@ -1,8 +1,8 @@
 
 public class Vector2D {
 
-    double x;
-    double y;
+    public double x;
+    public double y;
 
     public Vector2D(double x, double y){
         this.x = x;
@@ -29,5 +29,9 @@ public class Vector2D {
         double len = Math.sqrt(this.x * this.x + this.y*this.y);
 
         return new Vector2D(this.x/len, this.y/len);
+    }
+
+    public static Vector2D fromPolar(double r, double theta){
+        return new Vector2D(r*Math.cos(theta), r*Math.sin(theta));
     }
 }
