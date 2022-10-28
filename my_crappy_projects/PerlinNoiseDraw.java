@@ -6,7 +6,7 @@ import java.awt.Color;
 
 import javax.swing.*;
 
-public class PerlinNoiseDraw    extends JPanel{
+public class PerlinNoiseDraw extends JPanel{
 
     static final int WIDTH = 400;
     static final int HEIGHT = 300;
@@ -23,20 +23,16 @@ public class PerlinNoiseDraw    extends JPanel{
         frame.add(this);
 
         while(true){
-            //this.repaint();
-            break;
+            this.repaint();
+            //break;
         }
     }
 
     @Override
     public void paint(Graphics g) {
         super.paint(g);
+
         Graphics2D g1 = (Graphics2D)g;
-
-        g1.setColor(Color.RED);
-        g1.drawRect(0, 0, 50, 50);
-
-        
         
         int size = 1;
 
@@ -50,14 +46,16 @@ public class PerlinNoiseDraw    extends JPanel{
 
         long t0 = System.currentTimeMillis();
 
+        int value = 0;
+
         for(int i = 0; i < WIDTH/size; i++){
-            int value = 0;
+            
             for(int j = 0; j < HEIGHT/size; j++){
                 double n1 = Noise.getNoise(i/scale, j/scale, z/scale);
                 double n2 = Noise.getNoise(i/scale2 + 2435423, j/scale2 + 3423423, z/scale2 + 908923);
-                double avg = (n1 + n2) / 2;
+                double avg = (n1 + n2) * 0.5;
 
-                value = (int) (255*avg);
+                value = (int)(255*avg);
                 //System.out.println(value);
 
                 g1.setColor(new Color(value, value, value));
@@ -72,39 +70,15 @@ public class PerlinNoiseDraw    extends JPanel{
                 //g1.setColor(new Color((int)(n1*255), 0, (int)(n2*255)));
                 //g1.fillRect(i*size, j*size + HEIGHT, size, size);
             }
-            //System.out.println(value);
         }
 
         long t1 = System.currentTimeMillis();
 
-        System.out.println("Fast draw: " + (t1-t0) + "ms");
+        System.out.println("Draw Time: " + (t1-t0) + "ms");
 
+        z += 100/scale;
 
-
-        t0 = System.currentTimeMillis();
-
-        for(int i = 0; i < WIDTH/size; i++){
-            int value = 0;
-            for(int j = 0; j < HEIGHT/size; j++){
-                double n1 = Noise.slowGetNoise(i/scale, j/scale, z/scale);
-                double n2 = Noise.slowGetNoise(i/scale2 + 2435423, j/scale2 + 3423423, z/scale2 + 908923);
-                double avg = (n1 + n2) / 2;
-
-                value = (int) (255*avg);
-                //System.out.println(value);
-
-                g1.setColor(new Color(value, value, value));
-                g1.fillRect(i*size + WIDTH, j*size, size, size);
-            }
-        }
-
-        t1 = System.currentTimeMillis();
-
-        System.out.println("Slow draw: " + (t1-t0) + "ms");
-
-        //z += 1/scale;
-
-        //scale += 0.1;
+        scale += 0.1;
 
         //System.out.println(z);
 
