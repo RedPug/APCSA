@@ -1,3 +1,4 @@
+package my_crappy_projects;
 
 public class NumberRiddle{
     public static void main(String[] args){

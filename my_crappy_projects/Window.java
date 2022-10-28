@@ -1,3 +1,5 @@
+package my_crappy_projects;
+
 import javax.swing.*;
 
 public class Window{

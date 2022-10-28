@@ -1,3 +1,5 @@
+package my_crappy_projects;
+
 public class StringPratice {
     public static void main(String[] args){
         String[][] arr1 = {

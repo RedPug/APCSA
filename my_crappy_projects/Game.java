@@ -1,3 +1,5 @@
+package my_crappy_projects;
+
 import java.awt.*;
 import java.awt.event.*;
 import javax.swing.*;

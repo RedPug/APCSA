@@ -20,8 +20,9 @@ public class Review {
   private static final String SPACE = " ";
 
   public static void main(String[] args){
-    System.out.println(totalSentiment("ConsumerLab_Code/something.txt"));
-    System.out.println(starRating("ConsumerLab_Code/something.txt"));
+    //System.out.println(totalSentiment("ConsumerLab_Code/something.txt"));
+    //System.out.println(starRating("ConsumerLab_Code/something.txt"));
+    System.out.println(fakeReview("ConsumerLab_Code/something_else.txt"));
   }
 
   public static int starRating(String fileName){
@@ -31,7 +32,31 @@ public class Review {
 
     return Math.min(Math.max(rating, 1), 4);
   }
-  
+
+  public static String fakeReview(String fileName){
+    String text = textToString(fileName);
+    String adjective = "";
+    while (text.indexOf("*")>0){
+      int index = text.indexOf("*");
+      int i;
+      for (i = index; i<text.lastIndexOf(" "); i++){
+        if (text.substring(i,i+1).equals(" ")){
+          adjective = text.substring(index + 1, i);
+          break;
+        }
+      }
+      double num = sentimentVal(adjective);
+
+      if (num > 0){
+        text = text.substring(0,index) + randomPositiveAdj() + text.substring(i);
+      }else{
+        text = text.substring(0,index) + randomNegativeAdj() + text.substring(i);
+      }
+    }
+
+    return text;
+  }
+ 
   /**
    * returns the sum of sentiment values for the entire text file
    * @param fileName location of the file to be checked
@@ -79,7 +104,7 @@ public class Review {
       Scanner input = new Scanner(new File("C:/Users/1934355/Desktop/GitCode/APCSA/ConsumerLab_Code/positiveAdjectives.txt"));
       while(input.hasNextLine()){
         String temp = input.nextLine().trim();
-        System.out.println(temp);
+        //System.out.println(temp);
         posAdjectives.add(temp);
       }
       input.close();
@@ -113,7 +138,8 @@ public class Review {
       
       //add 'words' in the file to the string, separated by a single space
       while(input.hasNext()){
-        temp = temp + input.next() + " ";
+        temp = temp + input.nextLine() + " \n";
+        
       }
       input.close();
       

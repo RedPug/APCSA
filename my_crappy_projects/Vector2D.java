@@ -1,3 +1,4 @@
+package my_crappy_projects;
 
 public class Vector2D {
 
