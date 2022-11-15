@@ -43,11 +43,44 @@ public class PhraseSolver
     {
       
       /* your code here - game logic */
+      game.setLetterVale();
       
-      
+      System.out.println("Solved phrase: "+game.getSolvedPhrase());
+
+      if(currentPlayer == 1){
+        System.out.print(player1.getName());
+      }else {System.out.print(player2.getName());}
+      System.out.println(", Please enter your guess.");
+
+      String guess = input.nextLine();
+
+      if(guess.length() == 1){
+        correct = game.guessLetter(guess);
+
+        if(correct){
+          if(currentPlayer == 1){
+            player1.addPoints(game.getPointsPool());
+          }else {
+            player2.addPoints(game.getPointsPool());
+          }
+        }
+
+        solved = game.isSolved(game.getSolvedPhrase());
+      }else{
+        solved = game.isSolved(guess);
+
+        (currentPlayer == 1 ? player1 : player2).addPoints(100000000);
+      }
+
       /* your code here - determine how game ends */
-      solved = true; 
-    } 
+      currentPlayer = currentPlayer == 1 ? 2 : 1;
+    }
+
+    if(player1.getPoints() > player2.getPoints()){
+      System.out.println(player1.getName()+" wins with "+player1.getPoints()+" points.");
+    }else{
+      System.out.println(player2.getName()+" wins with "+player2.getPoints()+" points.");
+    }
    
   }
   

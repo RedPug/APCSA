@@ -23,7 +23,7 @@ public class Player
 
     this.name = name;
 
-    System.out.println("Hello, {"+name+"}, you suck. Have a fun time playing this miserable game!");
+    System.out.println("Hello, {"+name+"}, you are bad at this. Have a fun time playing this miserable game!");
 
     //sc.close();
 
@@ -36,7 +36,7 @@ public class Player
 
     this.score = 0;
 
-    System.out.println("Hello, {"+this.name+"}, you suck. Have a fun time playing this miserable game!");
+    System.out.println("Hello, {"+this.name+"}, you are bad at this. Have a fun time playing this miserable game!");
   }
 
   /* your code here - accessor(s) */ 
