@@ -44,7 +44,14 @@ public class PhraseSolver
       
       /* your code here - game logic */
       game.setLetterVale();
+
+      System.out.println();
       
+      System.out.println(
+        player1.getName()+": "+player1.getPoints()+" points, "
+      + player2.getName() + ": " + player2.getPoints()+" points."
+      + " Next guess: " + game.getPointsPool() + " points."
+      );
       System.out.println("Solved phrase: "+game.getSolvedPhrase());
 
       if(currentPlayer == 1){
@@ -65,11 +72,13 @@ public class PhraseSolver
           }
         }
 
-        solved = game.isSolved(game.getSolvedPhrase());
+        solved = game.getSolvedPhrase().indexOf("_") == -1;
       }else{
         solved = game.isSolved(guess);
-
-        (currentPlayer == 1 ? player1 : player2).addPoints(100000000);
+        if(solved){
+          (currentPlayer == 1 ? player1 : player2).addPoints(100000000);
+        }
+        
       }
 
       /* your code here - determine how game ends */
