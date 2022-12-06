@@ -6,6 +6,20 @@
     "configurations": [
         {
             "type": "java",
+            "name": "Launch Game",
+            "request": "launch",
+            "mainClass": "nim_original.Game",
+            "projectName": "APCSA_c29e881b"
+        },
+        {
+            "type": "java",
+            "name": "Launch Game",
+            "request": "launch",
+            "mainClass": "Nim.Game",
+            "projectName": "APCSA_c29e881b"
+        },
+        {
+            "type": "java",
             "name": "Launch Runner",
             "request": "launch",
             "mainClass": "PhraseSolverGame.Runner",
