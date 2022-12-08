@@ -28,17 +28,20 @@ public class Game {
             boolean turn = Math.random() > .5; //which player is going, true for p1, false for p2/computer
 
             while(this.board.getPileSum() > 0){
-                turn = !turn;
+                turn = !turn; //switch whose turn it is
                 if(turn){
                     player1.takeTurn(this.board);
                 }else if(mode == 1){
                     player2.takeTurn(this.board);
                 }else{
+                    //computer
+                    //get a random pile to remove from, avoiding empty piles
                     int pile = (int)(Math.random()*3)+1;
                     while(this.board.getCount(pile) <= 0 && this.board.getPileSum() > 0){
                         pile = (int)(Math.random()*3)+1;
                     }
-    
+                    
+                    //pick a random number of things to remove from the pile
                     int maxItemsToRemove = Math.max(this.board.getCount(pile)/2,1);
     
                     int num = (int)(Math.random()*(maxItemsToRemove)+1);
